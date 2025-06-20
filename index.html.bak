@@ -10,7 +10,7 @@
     <meta property="og:title" content="Secure Password Generator">
     <meta property="og:description" content="A simple and secure web-based password generator that lets you create strong, customizable passwords instantly.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://yourusername.github.io/your-repo-name/"> <!-- Update this URL after publishing -->
+    <meta property="og:url" content="https://afzalismailsakif.github.io/Secure-Password-Generator/"> <!-- Update this URL after publishing -->
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
