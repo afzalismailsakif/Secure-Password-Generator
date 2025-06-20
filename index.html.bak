@@ -87,7 +87,6 @@
             background: rgba(255, 255, 255, 0.1); /* Slightly transparent white background */
             backdrop-filter: blur(15px); /* Stronger frosted glass effect */
             border-radius: 20px; /* More rounded corners */
-            padding: 2.5rem;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); /* Stronger, diffused shadow */
             max-width: 500px;
             width: 100%;
@@ -208,12 +207,14 @@
         .custom-checkbox:checked::after {
             content: '';
             position: absolute;
-            top: 4px;
-            left: 4px;
-            width: 10px;
-            height: 10px;
-            border-radius: 2px;
-            background: white; /* White checkmark */
+            left: 6px; /* Adjust to better center the tick mark */
+            top: 3px; /* Adjust to better center the tick mark */
+            width: 5px; /* Width of the tick's short arm */
+            height: 12px; /* Height of the tick's long arm (slightly longer) */
+            border: solid white;
+            border-width: 0 2px 2px 0; /* Only right and bottom borders */
+            transform: rotate(45deg); /* Rotate to form a checkmark */
+            transition: transform 0.2s ease-in-out; /* Smooth transition for tick appearance */
         }
          .custom-checkbox:focus {
             outline: none;
@@ -240,7 +241,7 @@
         <div class="bubble"></div>
     </div>
 
-    <div class="container relative">
+    <div class="container relative p-6 sm:p-10">
         <h1 class="text-3xl font-bold text-center mb-8 bg-clip-text text-transparent bg-gradient-to-r from-purple-300 to-blue-300">
             Secure Password Generator
         </h1>
