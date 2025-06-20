@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Password Generator | Generate Strong Passwords Easily</title>
+    <meta name="description" content="A simple and secure web-based password generator that lets you create strong, customizable passwords instantly.">
+    <meta name="keywords" content="password generator, secure password, strong password, password tool, generate password">
+    <meta name="author" content="Md. Afzal Ismail">
+    <meta property="og:title" content="Secure Password Generator">
+    <meta property="og:description" content="A simple and secure web-based password generator that lets you create strong, customizable passwords instantly.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourusername.github.io/your-repo-name/"> <!-- Update this URL after publishing -->
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column; /* Allow content and footer to stack */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Purple to Blue Gradient */
+            color: #e2e8f0; /* Light gray text for contrast */
+            padding: 1rem;
+            overflow: hidden; /* Prevent scrollbars from background animation */
+            position: relative;
+        }
+
+        /* Background animation styles */
+        .background-bubbles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1); /* White transparent bubbles */
+            border-radius: 50%;
+            animation: bubble-float 15s infinite ease-in-out;
+            opacity: 0.7;
+        }
+
+        @keyframes bubble-float {
+            0% {
+                transform: translateY(0) translateX(0) scale(0.8);
+                opacity: 0.7;
+            }
+            25% {
+                transform: translateY(-20vh) translateX(10vw) scale(1.1);
+                opacity: 0.9;
+            }
+            50% {
+                transform: translateY(-40vh) translateX(-5vw) scale(0.9);
+                opacity: 0.8;
+            }
+            75% {
+                transform: translateY(-60vh) translateX(15vw) scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(0) scale(0.8);
+                opacity: 0.7;
+            }
+        }
+
+        /* Adjust individual bubble animations for variety */
+        .bubble:nth-child(1) { left: 10%; width: 60px; height: 60px; animation-duration: 18s; animation-delay: 0s; }
+        .bubble:nth-child(2) { left: 25%; width: 40px; height: 40px; animation-duration: 15s; animation-delay: 2s; }
+        .bubble:nth-child(3) { left: 40%; width: 80px; height: 80px; animation-duration: 20s; animation-delay: 4s; }
+        .bubble:nth-child(4) { left: 60%; width: 50px; height: 50px; animation-duration: 16s; animation-delay: 1s; }
+        .bubble:nth-child(5) { left: 75%; width: 70px; height: 70px; animation-duration: 19s; animation-delay: 3s; }
+        .bubble:nth-child(6) { left: 15%; width: 30px; height: 30px; animation-duration: 14s; animation-delay: 5s; }
+        .bubble:nth-child(7) { left: 85%; width: 90px; height: 90px; animation-duration: 22s; animation-delay: 0.5s; }
+        .bubble:nth-child(8) { left: 50%; width: 55px; height: 55px; animation-duration: 17s; animation-delay: 2.5s; }
+
+
+        .container {
+            background: rgba(255, 255, 255, 0.1); /* Slightly transparent white background */
+            backdrop-filter: blur(15px); /* Stronger frosted glass effect */
+            border-radius: 20px; /* More rounded corners */
+            padding: 2.5rem;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); /* Stronger, diffused shadow */
+            max-width: 500px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border */
+            position: relative; /* Ensure container is above bubbles */
+            z-index: 1; /* Bring container to foreground */
+            margin-bottom: 2rem; /* Space before footer */
+        }
+        /* Custom slider styles for modern design */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 10px; /* Track height */
+            background: transparent; /* Hide default track */
+            outline: none;
+            margin: 0; /* Remove default margin */
+        }
+
+        input[type="range"]::-webkit-slider-runnable-track {
+            height: 10px;
+            border-radius: 5px;
+            background: linear-gradient(to right, #a78bfa, #818cf8); /* Purple to Blue gradient track */
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        input[type="range"]::-moz-range-track {
+            height: 10px;
+            border-radius: 5px;
+            background: linear-gradient(to right, #a78bfa, #818cf8);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 28px; /* Larger thumb */
+            height: 28px; /* Larger thumb */
+            border-radius: 50%;
+            background: #fff; /* White thumb */
+            cursor: grab;
+            margin-top: -9px; /* Adjust to center thumb on track */
+            box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.3), 0 3px 8px rgba(0,0,0,0.4); /* Stronger glow and shadow */
+            transition: background .15s ease-in-out, transform .15s ease-in-out, box-shadow .15s ease-in-out;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.5), 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        input[type="range"]::-webkit-slider-thumb:active {
+            transform: scale(1.1); /* Pop effect on active */
+            cursor: grabbing;
+            box-shadow: 0 0 0 7px rgba(255, 255, 255, 0.6), 0 5px 12px rgba(0,0,0,0.6);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #fff;
+            cursor: grab;
+            box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.3), 0 3px 8px rgba(0,0,0,0.4);
+            transition: background .15s ease-in-out, transform .15s ease-in-out, box-shadow .15s ease-in-out;
+        }
+        input[type="range"]::-moz-range-thumb:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.5), 0 4px 10px rgba(0,0,0,0.5);
+        }
+        input[type="range"]::-moz-range-thumb:active {
+            transform: scale(1.1);
+            cursor: grabbing;
+            box-shadow: 0 0 0 7px rgba(255, 255, 255, 0.6), 0 5px 12px rgba(0,0,0,0.6);
+        }
+
+        /* Tic marks styling - will be empty now but keeping class for structure */
+        .slider-ticks {
+            position: relative;
+            width: 100%;
+            height: 0; /* No height needed if no ticks */
+            margin-top: 0; /* No margin needed */
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+        }
+
+        .copied-message {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        }
+        .copied-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom checkbox style */
+        .custom-checkbox {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border: 2px solid #a78bfa; /* Purple border */
+            border-radius: 6px; /* Slightly more rounded */
+            background-color: rgba(255, 255, 255, 0.15); /* Light transparent fill */
+            display: inline-block;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .custom-checkbox:checked {
+            background-color: #a78bfa; /* Purple when checked */
+            border-color: #a78bfa;
+        }
+
+        .custom-checkbox:checked::after {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            background: white; /* White checkmark */
+        }
+         .custom-checkbox:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.5); /* Focus ring */
+        }
+        .footer {
+            margin-top: auto; /* Push footer to the bottom */
+            padding-top: 1rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-bubbles">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+
+    <div class="container relative">
+        <h1 class="text-3xl font-bold text-center mb-8 bg-clip-text text-transparent bg-gradient-to-r from-purple-300 to-blue-300">
+            Secure Password Generator
+        </h1>
+
+        <!-- Password Display Area -->
+        <div class="mb-6">
+            <div class="relative">
+                <input
+                    type="text"
+                    id="password-display"
+                    class="w-full p-4 pr-12 rounded-xl bg-gray-700 bg-opacity-30 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 shadow-inner text-lg sm:text-xl font-mono tracking-wide transform transition-transform duration-200 ease-in-out hover:scale-[1.01]"
+                    placeholder="Your strong password"
+                    readonly
+                />
+                <button
+                    id="copy-button"
+                    class="absolute right-3 top-1/2 -translate-y-1/2 p-2 bg-purple-600 hover:bg-purple-700 rounded-lg transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-purple-400 active:scale-95"
+                    aria-label="Copy password to clipboard"
+                    title="Copy to clipboard"
+                >
+                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path>
+                        <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path>
+                    </svg>
+                </button>
+            </div>
+            <p id="message-area" class="text-center text-green-300 text-sm mt-2 copied-message"></p>
+        </div>
+
+        <!-- Password Length Slider -->
+        <div class="mb-6">
+            <label for="password-length" class="block text-gray-200 text-sm font-medium mb-2">
+                Password Length: <span id="length-value" class="font-bold text-purple-300">12</span>
+            </label>
+            <input
+                type="range"
+                id="password-length"
+                min="6"
+                max="32"
+                value="12"
+            />
+        </div>
+
+        <!-- Options Checkboxes -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+            <div class="flex items-center">
+                <input
+                    type="checkbox"
+                    id="include-uppercase"
+                    checked
+                    class="custom-checkbox"
+                />
+                <label for="include-uppercase" class="ml-3 text-gray-200">Include Uppercase</label>
+            </div>
+            <div class="flex items-center">
+                <input
+                    type="checkbox"
+                    id="include-lowercase"
+                    checked
+                    class="custom-checkbox"
+                />
+                <label for="include-lowercase" class="ml-3 text-gray-200">Include Lowercase</label>
+            </div>
+            <div class="flex items-center">
+                <input
+                    type="checkbox"
+                    id="include-numbers"
+                    checked
+                    class="custom-checkbox"
+                />
+                <label for="include-numbers" class="ml-3 text-gray-200">Include Numbers</label>
+            </div>
+            <div class="flex items-center">
+                <input
+                    type="checkbox"
+                    id="include-symbols"
+                    checked
+                    class="custom-checkbox"
+                />
+                <label for="include-symbols" class="ml-3 text-gray-200">Include Symbols</label>
+            </div>
+        </div>
+
+        <!-- Generate Button -->
+        <button
+            id="generate-button"
+            class="w-full py-3 rounded-xl text-lg font-semibold bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 transition duration-300 ease-in-out shadow-lg transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-gray-900"
+        >
+            Generate Password
+        </button>
+    </div>
+
+    <!-- Developer Credit Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Secure Password Generator. Developed by <span class="font-semibold text-purple-300">Md. Afzal Ismail</span>.</p>
+    </footer>
+
+    <script>
+        // Get references to DOM elements
+        const passwordDisplay = document.getElementById('password-display');
+        const passwordLengthSlider = document.getElementById('password-length');
+        const lengthValueSpan = document.getElementById('length-value');
+        const includeUppercaseCheckbox = document.getElementById('include-uppercase');
+        const includeLowercaseCheckbox = document.getElementById('include-lowercase');
+        const includeNumbersCheckbox = document.getElementById('include-numbers');
+        const includeSymbolsCheckbox = document.getElementById('include-symbols');
+        const generateButton = document.getElementById('generate-button');
+        const copyButton = document.getElementById('copy-button');
+        const messageArea = document.getElementById('message-area');
+
+        // Character sets for password generation
+        const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
+        const numberChars = '0123456789';
+        const symbolChars = '!@#$%^&*()_+~`|}{[]:;?><,./-=';
+
+        /**
+         * Updates the displayed password length value.
+         */
+        function updateLengthValue() {
+            lengthValueSpan.textContent = passwordLengthSlider.value;
+        }
+
+        /**
+         * Displays a message to the user for a short duration.
+         * @param {string} message - The message to display.
+         * @param {string} type - The type of message ('success', 'error').
+         */
+        function displayMessage(message, type) {
+            messageArea.textContent = message;
+            messageArea.className = 'text-center text-sm mt-2 copied-message show'; // Reset and show
+            if (type === 'success') {
+                messageArea.classList.add('text-green-300');
+                messageArea.classList.remove('text-red-300');
+            } else if (type === 'error') {
+                messageArea.classList.add('text-red-300');
+                messageArea.classList.remove('text-green-300');
+            }
+
+            // Hide the message after 2 seconds
+            setTimeout(() => {
+                messageArea.classList.remove('show');
+            }, 2000);
+        }
+
+        /**
+         * Generates a random password based on selected criteria.
+         */
+        function generatePassword() {
+            let allChars = '';
+            let generatedPassword = '';
+            const length = parseInt(passwordLengthSlider.value);
+
+            // Build the character set based on selected options
+            if (includeUppercaseCheckbox.checked) {
+                allChars += uppercaseChars;
+                // Ensure at least one character from this set is included
+                generatedPassword += uppercaseChars[Math.floor(Math.random() * uppercaseChars.length)];
+            }
+            if (includeLowercaseCheckbox.checked) {
+                allChars += lowercaseChars;
+                generatedPassword += lowercaseChars[Math.floor(Math.random() * lowercaseChars.length)];
+            }
+            if (includeNumbersCheckbox.checked) {
+                allChars += numberChars;
+                generatedPassword += numberChars[Math.floor(Math.random() * numberChars.length)];
+            }
+            if (includeSymbolsCheckbox.checked) {
+                allChars += symbolChars;
+                generatedPassword += symbolChars[Math.floor(Math.random() * symbolChars.length)];
+            }
+
+            // If no options are selected, display an error and return
+            if (allChars === '') {
+                passwordDisplay.value = ''; // Clear previous password
+                displayMessage('Please select at least one option!', 'error');
+                return;
+            }
+
+            // Fill the remaining length of the password
+            // Adjust length for pre-added characters
+            const remainingLength = length - generatedPassword.length;
+
+            for (let i = 0; i < remainingLength; i++) {
+                const randomIndex = Math.floor(Math.random() * allChars.length);
+                generatedPassword += allChars[randomIndex];
+            }
+
+            // Shuffle the password to ensure randomness of character types
+            generatedPassword = generatedPassword.split('').sort(() => Math.random() - 0.5).join('');
+
+            passwordDisplay.value = generatedPassword;
+            displayMessage('Password generated!', 'success');
+        }
+
+        /**
+         * Copies the generated password to the clipboard.
+         */
+        function copyPassword() {
+            if (passwordDisplay.value) {
+                // Use document.execCommand for better compatibility in iframe environments
+                passwordDisplay.select();
+                passwordDisplay.setSelectionRange(0, 99999); // For mobile devices
+                try {
+                    document.execCommand('copy');
+                    displayMessage('Password copied to clipboard!', 'success');
+                } catch (err) {
+                    console.error('Failed to copy text: ', err);
+                    displayMessage('Failed to copy password.', 'error');
+                }
+            } else {
+                displayMessage('No password to copy!', 'error');
+            }
+        }
+
+        // Event Listeners
+        passwordLengthSlider.addEventListener('input', updateLengthValue);
+        generateButton.addEventListener('click', generatePassword);
+        copyButton.addEventListener('click', copyPassword);
+
+        // Initial generation when the page loads
+        window.onload = function() {
+            updateLengthValue(); // Set initial length display
+            generatePassword(); // Generate a password on load
+        };
+
+        // Removed the event listeners for checkboxes
+        // includeUppercaseCheckbox.addEventListener('change', generatePassword);
+        // includeLowercaseCheckbox.addEventListener('change', generatePassword);
+        // includeNumbersCheckbox.addEventListener('change', generatePassword);
+        // includeSymbolsCheckbox.addEventListener('change', generatePassword);
+
+    </script>
+</body>
+</html>
